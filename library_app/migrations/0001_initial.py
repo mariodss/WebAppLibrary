@@ -23,3 +23,7 @@ class Migration(migrations.Migration):
             ],
         ),
     ]
+class Book(models.Model):
+    title = models.CharField(max_length=255)
+    author = models.CharField(max_length=255)
+    is_checked_out = models.BooleanField(default=False)
