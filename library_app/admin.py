@@ -4,3 +4,5 @@ from .models import *
 # Register your models here.
 
 admin.site.register(reader)
+admin.site.register(book)
+admin.site.register(Returns)

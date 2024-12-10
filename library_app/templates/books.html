@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+{% extends "index.html" %}
+{% load static %}
+
+
+
+
+{% block main_content %}
+
+<div class="container-flex text-center justify-content-center align-items-center"
+    style="background-color:rgb(255, 255, 255)">
+    <div class="row justify-content-center align-middle ">
+        <h4 style="margin-top:20px">Search for books</h4>
+        <div class="col-md-4 " style="background-color: rgb(255, 255, 255);">
+            <form class="d-flex justify-content-center" role="search" style="width: 125%; margin-top:20px; height: 60%;"
+                method="POST" action="/books">
+                {% csrf_token %}
+                <input class="form-control me-2" type="text" name="query" placeholder="Search" aria-label="Search"
+                    value="" {{query}}>
+                <button class="btn btn-outline-primary" type="submit" style="width: 30%;">Search</button>
+                <button class="btn btn-outline-primary" type="button" style="width: 30%;">Add Book</button>
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+    <div class="row justify-content-center align-middle">
+
+        <p>{{books|length}} in the library</p>
+
+
+    </div>
+
+    <div class="row justify-content-center align-middle " style="margin-top: 20px;">
+        <div class="col-md-8" style="overflow-y: auto;height: 400px;">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                        <th>Genre</th>
+                        <th>Year Published</th>
+
+                    </tr>
+
+                    {% for book in books %}
+
+                    <tr>
+                        <td>{{book.title}}</td>
+                        <td>{{book.author}}</td>
+                        <td>{{book.isbn}}</td>
+                        <td>{{book.genre}}</td>
+                        <td>{{book.published_date}}</td>
+                        
+                        <td>
+
+                            {%if book in bag %}
+
+                            <form method="POST" action="/books/remove_from_bag">
+                                {% csrf_token %}
+
+                                <input type="hidden" name="book_id" value="{{book.id}}">
+                                <button type="submit" class="btn btn-danger">Remove</button>
+
+                            </form>
+
+                            {% else %}
+
+                            <form method="POST" action="/books/add_to_my_bag">
+                                {% csrf_token %}
+
+                                <input type="hidden" name="book_id" value="{{book.id}}">
+                                <button type="submit" class="btn btn-primary">Add to Bag</button>
+
+                            </form>
+
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                    {% empty%}
+                    <tr>
+                        <td colspan="5">No books found.</td>
+                    </tr>
+
+                    {% endfor %}
+
+
+                </thead>
+
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class=" row justify-content-center align-middle" style="margin-top:30px">
+
+            <div class="col-md-8" style="overflow-y: auto;height: 400px; background-color: #ffffff;">
+
+                <h4>Add new book</h4>
+
+                <div class="container" style="overflow-y:auto; margin-top: 20px;">
+
+                    <form method="POST" action="/books/add">
+
+                        {% csrf_token %}
+
+                        <table class="table">
+                            <tr>
+                                <th style="text-align: left;vertical-align: middle;padding-left: 15px;">Book Name: </th>
+                                <td><input type="text" name="title" class="form-control" placeholder="Book Title"
+                                        required>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;vertical-align: middle;padding-left: 15px;">Author: </th>
+                                <td><input type="text" name="author" class="form-control" placeholder="Author" required>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;vertical-align: middle;padding-left: 15px;">ISBN: </th>
+                                <td><input type="text" name="isbn" class="form-control" placeholder="ISBN" required>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;vertical-align: middle;padding-left: 15px;">Genre: </th>
+                                <td><input type="text" name="genre" class="form-control" placeholder="Genre" required>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th style="text-align: left;vertical-align: middle;padding-left: 15px;">Date of
+                                    Publishing:
+                                </th>
+                                <td><input type="date" name="published_date" class="form-control"
+                                        placeholder="Published Date" required></td>
+
+                            </tr>
+
+                        </table>
+                        <button type="submit" class="btn btn-primary">Save Book</butoon>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
